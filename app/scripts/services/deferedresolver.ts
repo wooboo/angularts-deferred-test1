@@ -4,24 +4,37 @@
 
 module angularTsApp {
 export interface IDeferedResolver{
-  (parent:any,...args:any[]):(Function);
+  (parent:any,...args:any[]):((successCallback:(...res:any[])=>void,
+              errorCallback?:(reason:any)=>void,
+              notifyCollback?:(state:any)=>void)=>void);
 }
-export function deferedResolverFactory($q:ng.IQService, $rootScope: ng.IRootScopeService, $timeout: ng.ITimeoutService) {
-    return function(parent:any,...args:any[]){
-      var callback;
-      var promises:ng.IPromise<any>[] = [];
-      for (var i = 0; i < args.length; ++i) {
-        promises.push($q.when(args[i]));
-      }
+export function deferedResolverFactory($q:ng.IQService, $rootScope: ng.IRootScopeService, $timeout: ng.ITimeoutService):IDeferedResolver {
+    function deferedResolver(parent:any,...args:any[]){
+      var callback, errorCallback, notifyCollback;
+      var promises = args.map((v)=>$q.when(v));
       $q.all(promises).then((resolvedPromises)=>{
         if(callback){
             callback.apply(parent, resolvedPromises);
         }
+      },(reason)=>{
+        if(errorCallback){
+            errorCallback.apply(parent, [reason]);
+        }
+      },(state)=>{
+        if(notifyCollback){
+            notifyCollback.apply(parent, [state]);
+        }
       });
-      return (c)=>{
-        callback = c;
+      return (successCallback:(...res:any[])=>void,
+              errorCallback?:(reason:any)=>void,
+              notifyCollback?:(state:any)=>void)=>
+      {
+        callback = successCallback;
+        errorCallback = errorCallback;
+        notifyCollback = notifyCollback;
       }
     }
+    return deferedResolver;
   }
 }
 
