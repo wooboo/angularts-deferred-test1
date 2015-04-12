@@ -3,12 +3,9 @@
 'use strict';
 
 module angularTsApp {
-  export interface IMainScope extends ng.IScope {
-    awesomeThings: any[];
-  }
   export class MainCtrl extends BaseCtrl {
-    constructor (private $scope: IMainScope, private myService, private someService) {
-      super(arguments);
+    constructor (private $scope: IVmScope, private myService, private someService) {
+      super($scope, arguments);
     }
     init($scope, myService, someService){
         $scope.awesomeThings = [

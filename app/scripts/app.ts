@@ -21,7 +21,8 @@ angular.module('angularTsApp', [
       })
       .when('/myroute', {
         templateUrl: 'views/myroute.html',
-        controller: 'MyrouteCtrl'
+        controller: 'MyrouteCtrl',
+        controllerAs: 'vm'
       })
       .otherwise({
         redirectTo: '/'

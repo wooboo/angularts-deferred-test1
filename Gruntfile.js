@@ -147,9 +147,9 @@ module.exports = function (grunt) {
         options: {
           module: 'amd', //or commonjs
           target: 'es5', //or es3
-          sourceRoot: '/scripts', //quoting base_path to get around jshint warning.
-          sourceMap: true,
-          declaration: true
+          //sourceRoot: '/scripts', //quoting base_path to get around jshint warning.
+          sourceMap: false,
+          declaration: false
         }
       },
       test: {

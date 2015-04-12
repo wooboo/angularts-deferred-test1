@@ -4,9 +4,9 @@
 
 module angularTsApp {
 export interface IDeferedResolver{
-  (...promises:(ng.IPromise<any>|any)[]):(Function);
+  (parent:any,...args:any[]):(Function);
 }
-export function deferedResolverFactory($q:ng.IQService) {
+export function deferedResolverFactory($q:ng.IQService, $rootScope: ng.IRootScopeService, $timeout: ng.ITimeoutService) {
     return function(parent:any,...args:any[]){
       var callback;
       var promises:ng.IPromise<any>[] = [];
@@ -15,7 +15,7 @@ export function deferedResolverFactory($q:ng.IQService) {
       }
       $q.all(promises).then((resolvedPromises)=>{
         if(callback){
-          callback.apply(parent, resolvedPromises);
+            callback.apply(parent, resolvedPromises);
         }
       });
       return (c)=>{

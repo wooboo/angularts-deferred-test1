@@ -3,13 +3,11 @@
 'use strict';
 
 module angularTsApp {
-  export interface IUserScope extends ng.IScope {
-    awesomeThings: any[];
-  }
 
-  export class UserCtrl {
+  export class UserCtrl extends BaseCtrl {
 
-    constructor (private $scope: IUserScope) {
+    constructor (private $scope) {
+      super($scope, arguments);
       $scope.awesomeThings = [
         'HTML5 Boilerplate',
         'AngularJS',
